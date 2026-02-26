@@ -54,7 +54,6 @@
   }
   .badge { background: #2e2e5e; border-radius: 8px; padding: 4px 10px; font-size: 13px; color: #aaa; }
 
-  /* API KEY */
   .api-setup {
     margin: 16px 20px 0;
     background: #0a0a1e; border: 1px solid #2a2a4e;
@@ -77,7 +76,6 @@
   .api-status { font-size: 12px; color: #777; margin-top: 6px; }
   .api-status.ok { color: #44cc88; }
 
-  /* ENTRY */
   .preview-wrap { padding: 16px 20px 0; }
   .preview-wrap img { width: 100%; border-radius: 12px; object-fit: cover; max-height: 220px; }
   .no-image {
@@ -105,6 +103,26 @@
   }
   .ai-spinner.show { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* AI結果プレビュー */
+  .ai-result-box {
+    margin-top: 10px; padding: 12px 14px;
+    background: #0e0e2a; border: 1px solid #3a3aaa;
+    border-radius: 10px; display: none;
+  }
+  .ai-result-box.show { display: block; }
+  .ai-result-label { font-size: 11px; color: #7777cc; margin-bottom: 6px; }
+  .ai-result-name {
+    font-size: 18px; font-weight: 700; color: #ccccff;
+    margin-bottom: 8px; line-height: 1.4;
+  }
+  .ai-use-btn {
+    width: 100%; background: #2a2a6a; border: 1px solid #4a4aaa;
+    border-radius: 8px; padding: 10px;
+    color: #aaaaff; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .ai-use-btn:active { opacity: 0.7; }
 
   .section { padding: 16px 20px 0; }
   .field-label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
@@ -154,7 +172,6 @@
   }
   .save-btn:active { opacity: 0.8; }
 
-  /* HISTORY */
   .total-bar {
     margin: 16px 20px;
     background: linear-gradient(135deg, #1a1a3e, #12122e);
@@ -253,7 +270,6 @@
     <span>記録一覧を見る</span>
     <span class="badge" id="home-badge">0件 / ¥0</span>
   </button>
-
   <div class="api-setup">
     <div class="api-setup-title">✨ GPT-4o AI自動入力 — OpenAI APIキー設定</div>
     <div class="api-key-row">
@@ -275,15 +291,23 @@
   <div class="preview-wrap">
     <img id="preview-img" src="" alt="preview" style="display:none">
     <div id="no-image" class="no-image">画像なし</div>
+
     <button id="ai-btn" class="ai-analyze-btn" onclick="analyzeWithAI()" style="display:none">
       <div class="ai-spinner" id="ai-spinner"></div>
       <span id="ai-btn-text">✨ GPT-4oで商品名を自動入力</span>
     </button>
+
+    <!-- AI結果プレビュー（確認してから使う） -->
+    <div class="ai-result-box" id="ai-result-box">
+      <div class="ai-result-label">🤖 AIの解析結果 — 確認して「使う」を押してください</div>
+      <div class="ai-result-name" id="ai-result-name"></div>
+      <button class="ai-use-btn" onclick="applyAiResult()">✅ この名前を使う</button>
+    </div>
   </div>
 
   <div class="section">
     <label class="field-label">アイテム名</label>
-    <input id="item-name" class="name-input" type="text" placeholder="例：マグカップ">
+    <input id="item-name" class="name-input" type="text" placeholder="例：Louis Vuitton スピーディ25">
   </div>
 
   <div class="section">
@@ -339,6 +363,7 @@ let priceStr = '';
 let currentImage = null;
 let cameraStream = null;
 let apiKey = localStorage.getItem('mono-kiroku-openaikey') || '';
+let aiResultText = '';
 
 updateHomeBadge();
 if (apiKey) {
@@ -349,15 +374,11 @@ if (apiKey) {
 
 function saveApiKey() {
   const val = document.getElementById('api-key-input').value.trim();
-  if (!val.startsWith('sk-')) {
-    showToast('正しいAPIキーを入力してください（sk-...）');
-    return;
-  }
+  if (!val.startsWith('sk-')) { showToast('正しいAPIキーを入力してください（sk-...）'); return; }
   apiKey = val;
   localStorage.setItem('mono-kiroku-openaikey', apiKey);
-  const st = document.getElementById('api-status');
-  st.textContent = '✅ APIキー設定済み — GPT-4o自動入力が使えます';
-  st.classList.add('ok');
+  document.getElementById('api-status').textContent = '✅ APIキー設定済み — GPT-4o自動入力が使えます';
+  document.getElementById('api-status').classList.add('ok');
   showToast('APIキーを保存しました');
 }
 
@@ -402,7 +423,10 @@ function openEntry() {
   priceStr = '';
   document.getElementById('item-name').value = '';
   document.getElementById('item-memo').value = '';
+  document.getElementById('ai-result-box').classList.remove('show');
+  aiResultText = '';
   updatePriceDisplay();
+
   const img = document.getElementById('preview-img');
   const noImg = document.getElementById('no-image');
   const aiBtn = document.getElementById('ai-btn');
@@ -415,7 +439,7 @@ function openEntry() {
   showPage('entry');
 }
 
-// ── GPT-4o 画像解析 ──────────────────────────────
+// ── GPT-4o 画像解析（ブランド名＋商品名特化プロンプト）──
 async function analyzeWithAI() {
   if (!apiKey) { showToast('APIキーを設定してください'); return; }
   if (!currentImage) return;
@@ -423,7 +447,9 @@ async function analyzeWithAI() {
   const btn = document.getElementById('ai-btn');
   const spinner = document.getElementById('ai-spinner');
   const btnText = document.getElementById('ai-btn-text');
+  const resultBox = document.getElementById('ai-result-box');
   btn.disabled = true; spinner.classList.add('show'); btnText.textContent = 'AI解析中...';
+  resultBox.classList.remove('show');
 
   try {
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -434,20 +460,29 @@ async function analyzeWithAI() {
       },
       body: JSON.stringify({
         model: 'gpt-4o',
-        max_tokens: 100,
-        messages: [{
-          role: 'user',
-          content: [
-            {
-              type: 'image_url',
-              image_url: { url: currentImage, detail: 'low' }
-            },
-            {
-              type: 'text',
-              text: 'この画像に写っている商品・物の名前を日本語で答えてください。できるだけ具体的な商品名・ブランド名・種類がわかるように答えてください。商品名のみを20文字以内で返してください。説明文は不要です。'
-            }
-          ]
-        }]
+        max_tokens: 150,
+        messages: [
+          {
+            role: 'system',
+            content: `あなたは商品識別の専門家です。画像を見て商品を特定し、以下のフォーマットで答えてください。
+
+フォーマット：「ブランド名 商品名 型番やシリーズ名」
+
+ルール：
+- ブランドが判別できる場合は必ずブランド名を先頭に書く（例：Louis Vuitton、UNIQLO、Apple、Nike）
+- 商品名・モデル名・シリーズ名がわかれば書く（例：スピーディ25、エアフォース1、iPhone 15）
+- ブランドが不明な場合は商品の種類と特徴を書く（例：黒のレザーハンドバッグ）
+- 説明文・前置き・句読点は不要。商品名だけを返す
+- 日本語で答える（ブランド名はそのままでよい）`
+          },
+          {
+            role: 'user',
+            content: [
+              { type: 'image_url', image_url: { url: currentImage, detail: 'high' } },
+              { type: 'text', text: 'この商品のブランド名と商品名を答えてください。' }
+            ]
+          }
+        ]
       })
     });
 
@@ -458,25 +493,30 @@ async function analyzeWithAI() {
 
     const data = await res.json();
     const name = data.choices?.[0]?.message?.content?.trim();
+
     if (name) {
-      document.getElementById('item-name').value = name;
-      showToast('✨ 商品名を自動入力しました');
+      aiResultText = name;
+      document.getElementById('ai-result-name').textContent = name;
+      resultBox.classList.add('show');
     } else {
       showToast('商品名を取得できませんでした');
     }
   } catch(e) {
-    console.error(e);
-    if (e.message.includes('401')) {
-      showToast('APIキーが無効です。確認してください');
-    } else if (e.message.includes('429')) {
-      showToast('利用制限中です。しばらく待ってください');
-    } else {
-      showToast('エラー: ' + e.message);
-    }
+    if (e.message.includes('401')) showToast('APIキーが無効です');
+    else if (e.message.includes('429')) showToast('利用制限中です。しばらく待ってください');
+    else if (e.message.includes('billing') || e.message.includes('insufficient')) showToast('OpenAIの残高を確認してください');
+    else showToast('エラー: ' + e.message);
   } finally {
     btn.disabled = false; spinner.classList.remove('show');
     btnText.textContent = '✨ GPT-4oで商品名を自動入力';
   }
+}
+
+function applyAiResult() {
+  if (!aiResultText) return;
+  document.getElementById('item-name').value = aiResultText;
+  document.getElementById('ai-result-box').classList.remove('show');
+  showToast('商品名を入力しました');
 }
 
 function pressNum(n) { if (priceStr.length >= 8) return; priceStr += n; updatePriceDisplay(); }
