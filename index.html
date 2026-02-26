@@ -57,21 +57,21 @@
   /* API KEY */
   .api-setup {
     margin: 16px 20px 0;
-    background: #0e1a0e; border: 1px solid #1e3e1e;
+    background: #0a0a1e; border: 1px solid #2a2a4e;
     border-radius: 14px; padding: 16px 20px;
   }
-  .api-setup-title { font-size: 13px; color: #66bb66; margin-bottom: 8px; font-weight: 600; }
+  .api-setup-title { font-size: 13px; color: #8888ff; margin-bottom: 8px; font-weight: 600; }
   .api-key-row { display: flex; gap: 8px; }
   .api-key-input {
-    flex: 1; background: #0d0d1a; border: 1px solid #1e3e1e;
+    flex: 1; background: #0d0d1a; border: 1px solid #2a2a4e;
     border-radius: 8px; padding: 10px 12px;
     color: #f0f0f0; font-size: 14px; font-family: inherit; outline: none;
   }
-  .api-key-input:focus { border-color: #44bb44; }
+  .api-key-input:focus { border-color: #7b7bff; }
   .api-save-btn {
-    background: #1a3a1a; border: 1px solid #2e6e2e;
+    background: #1a1a3a; border: 1px solid #3a3a6a;
     border-radius: 8px; padding: 10px 14px;
-    color: #66ee66; font-size: 13px; font-weight: 600;
+    color: #aaaaff; font-size: 13px; font-weight: 600;
     cursor: pointer; font-family: inherit; white-space: nowrap;
   }
   .api-status { font-size: 12px; color: #777; margin-top: 6px; }
@@ -89,9 +89,9 @@
 
   .ai-analyze-btn {
     margin-top: 10px; width: 100%;
-    background: linear-gradient(135deg, #0e2a1e, #0a1e14);
-    border: 1px solid #2e6e4e; border-radius: 10px; padding: 12px;
-    color: #44ee88; font-size: 15px; font-weight: 600;
+    background: linear-gradient(135deg, #1a1a3e, #0e0e2a);
+    border: 1px solid #4a4aaa; border-radius: 10px; padding: 12px;
+    color: #aaaaff; font-size: 15px; font-weight: 600;
     cursor: pointer; font-family: inherit;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     transition: opacity .15s;
@@ -99,8 +99,8 @@
   .ai-analyze-btn:active { opacity: 0.7; }
   .ai-analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .ai-spinner {
-    width: 16px; height: 16px; border: 2px solid #44ee8844;
-    border-top-color: #44ee88; border-radius: 50%;
+    width: 16px; height: 16px; border: 2px solid #aaaaff44;
+    border-top-color: #aaaaff; border-radius: 50%;
     animation: spin .7s linear infinite; display: none;
   }
   .ai-spinner.show { display: block; }
@@ -255,12 +255,12 @@
   </button>
 
   <div class="api-setup">
-    <div class="api-setup-title">🔍 Google Vision AI — APIキー設定</div>
+    <div class="api-setup-title">✨ GPT-4o AI自動入力 — OpenAI APIキー設定</div>
     <div class="api-key-row">
-      <input id="api-key-input" class="api-key-input" type="password" placeholder="AIzaSy...">
+      <input id="api-key-input" class="api-key-input" type="password" placeholder="sk-proj-...">
       <button class="api-save-btn" onclick="saveApiKey()">保存</button>
     </div>
-    <div class="api-status" id="api-status">未設定（設定するとAIが商品名を自動入力します）</div>
+    <div class="api-status" id="api-status">未設定（設定するとGPT-4oが商品名を自動入力します）</div>
   </div>
 </div>
 
@@ -277,7 +277,7 @@
     <div id="no-image" class="no-image">画像なし</div>
     <button id="ai-btn" class="ai-analyze-btn" onclick="analyzeWithAI()" style="display:none">
       <div class="ai-spinner" id="ai-spinner"></div>
-      <span id="ai-btn-text">🔍 AIで商品名を自動入力</span>
+      <span id="ai-btn-text">✨ GPT-4oで商品名を自動入力</span>
     </button>
   </div>
 
@@ -338,25 +338,25 @@ let records = JSON.parse(localStorage.getItem('mono-kiroku') || '[]');
 let priceStr = '';
 let currentImage = null;
 let cameraStream = null;
-let apiKey = localStorage.getItem('mono-kiroku-visionkey') || '';
+let apiKey = localStorage.getItem('mono-kiroku-openaikey') || '';
 
 updateHomeBadge();
 if (apiKey) {
   document.getElementById('api-key-input').value = apiKey;
-  document.getElementById('api-status').textContent = '✅ APIキー設定済み — AI自動入力が使えます';
+  document.getElementById('api-status').textContent = '✅ APIキー設定済み — GPT-4o自動入力が使えます';
   document.getElementById('api-status').classList.add('ok');
 }
 
 function saveApiKey() {
   const val = document.getElementById('api-key-input').value.trim();
-  if (!val.startsWith('AIzaSy')) {
-    showToast('正しいAPIキーを入力してください（AIzaSy...）');
+  if (!val.startsWith('sk-')) {
+    showToast('正しいAPIキーを入力してください（sk-...）');
     return;
   }
   apiKey = val;
-  localStorage.setItem('mono-kiroku-visionkey', apiKey);
+  localStorage.setItem('mono-kiroku-openaikey', apiKey);
   const st = document.getElementById('api-status');
-  st.textContent = '✅ APIキー設定済み — AI自動入力が使えます';
+  st.textContent = '✅ APIキー設定済み — GPT-4o自動入力が使えます';
   st.classList.add('ok');
   showToast('APIキーを保存しました');
 }
@@ -415,7 +415,7 @@ function openEntry() {
   showPage('entry');
 }
 
-// ── Google Cloud Vision API ──────────────────────
+// ── GPT-4o 画像解析 ──────────────────────────────
 async function analyzeWithAI() {
   if (!apiKey) { showToast('APIキーを設定してください'); return; }
   if (!currentImage) return;
@@ -426,82 +426,56 @@ async function analyzeWithAI() {
   btn.disabled = true; spinner.classList.add('show'); btnText.textContent = 'AI解析中...';
 
   try {
-    const base64 = currentImage.split(',')[1];
-
-    const res = await fetch(
-      `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requests: [{
-            image: { content: base64 },
-            features: [
-              { type: 'LABEL_DETECTION', maxResults: 5 },
-              { type: 'OBJECT_LOCALIZATION', maxResults: 3 },
-              { type: 'TEXT_DETECTION', maxResults: 1 }
-            ]
-          }]
-        })
-      }
-    );
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 100,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image_url',
+              image_url: { url: currentImage, detail: 'low' }
+            },
+            {
+              type: 'text',
+              text: 'この画像に写っている商品・物の名前を日本語で答えてください。できるだけ具体的な商品名・ブランド名・種類がわかるように答えてください。商品名のみを20文字以内で返してください。説明文は不要です。'
+            }
+          ]
+        }]
+      })
+    });
 
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error?.message || 'APIエラー');
+      throw new Error(err.error?.message || `HTTPエラー ${res.status}`);
     }
 
     const data = await res.json();
-    const result = data.responses[0];
-
-    // 優先順位: オブジェクト検出 > ラベル > テキスト
-    let name = '';
-
-    // 1. オブジェクト検出（最も具体的）
-    if (result.localizedObjectAnnotations?.length > 0) {
-      name = result.localizedObjectAnnotations[0].name;
-    }
-    // 2. ラベル検出（フォールバック）
-    else if (result.labelAnnotations?.length > 0) {
-      name = result.labelAnnotations[0].description;
-    }
-    // 3. テキスト（商品名が写っている場合）
-    else if (result.textAnnotations?.length > 0) {
-      const text = result.textAnnotations[0].description.split('\n')[0];
-      if (text.length <= 20) name = text;
-    }
-
+    const name = data.choices?.[0]?.message?.content?.trim();
     if (name) {
-      // 英語で返ってきた場合は日本語に翻訳を試みる
-      // （Vision APIは英語で返すことが多いため簡易マッピング）
-      const translations = {
-        'Cup': 'カップ', 'Mug': 'マグカップ', 'Bottle': 'ボトル',
-        'Bag': 'バッグ', 'Shoe': 'シューズ', 'Shoes': 'シューズ',
-        'Book': '本', 'Clothing': '衣類', 'Shirt': 'シャツ',
-        'Pants': 'パンツ', 'Jacket': 'ジャケット', 'Coat': 'コート',
-        'Watch': '時計', 'Glasses': 'メガネ', 'Toy': 'おもちゃ',
-        'Food': '食品', 'Drink': '飲み物', 'Flower': '花',
-        'Plant': '植物', 'Furniture': '家具', 'Chair': '椅子',
-        'Table': 'テーブル', 'Lamp': 'ランプ', 'Bowl': 'ボウル',
-        'Plate': 'お皿', 'Pen': 'ペン', 'Notebook': 'ノート',
-        'Headphones': 'ヘッドフォン', 'Keyboard': 'キーボード',
-        'Mouse': 'マウス', 'Laptop': 'ノートPC', 'Phone': 'スマートフォン',
-        'Camera': 'カメラ', 'Backpack': 'リュック', 'Wallet': '財布',
-        'Umbrella': '傘', 'Hat': '帽子', 'Scarf': 'スカーフ',
-        'Socks': '靴下', 'Glove': '手袋', 'Sneakers': 'スニーカー',
-        'Sandal': 'サンダル', 'Handbag': 'ハンドバッグ',
-      };
-      const translated = translations[name] || name;
-      document.getElementById('item-name').value = translated;
-      showToast('🔍 商品名を自動入力しました');
+      document.getElementById('item-name').value = name;
+      showToast('✨ 商品名を自動入力しました');
     } else {
-      showToast('商品名を検出できませんでした');
+      showToast('商品名を取得できませんでした');
     }
   } catch(e) {
-    showToast('エラー: ' + e.message);
+    console.error(e);
+    if (e.message.includes('401')) {
+      showToast('APIキーが無効です。確認してください');
+    } else if (e.message.includes('429')) {
+      showToast('利用制限中です。しばらく待ってください');
+    } else {
+      showToast('エラー: ' + e.message);
+    }
   } finally {
     btn.disabled = false; spinner.classList.remove('show');
-    btnText.textContent = '🔍 AIで商品名を自動入力';
+    btnText.textContent = '✨ GPT-4oで商品名を自動入力';
   }
 }
 
