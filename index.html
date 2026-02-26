@@ -15,7 +15,6 @@
     margin: 0 auto;
   }
 
-  /* ── HEADER ── */
   .header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 20px;
@@ -23,30 +22,22 @@
   }
   .back-btn {
     color: #7b7bff; background: transparent; border: none;
-    font-size: 20px; cursor: pointer; font-family: inherit;
-    padding: 4px 8px;
+    font-size: 20px; cursor: pointer; font-family: inherit; padding: 4px 8px;
   }
   .header-title { font-size: 17px; font-weight: 600; }
 
-  /* ── HOME ── */
-  .hero {
-    padding: 60px 20px 40px;
-    text-align: center;
-  }
+  .hero { padding: 60px 20px 40px; text-align: center; }
   .hero-icon { font-size: 64px; margin-bottom: 12px; }
   .hero-title { font-size: 36px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
   .hero-sub { font-size: 14px; color: #888; }
 
   .actions { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
-
   .action-label {
-    border: 1px solid #2e2e5e;
-    border-radius: 14px; padding: 18px 20px;
+    border: 1px solid #2e2e5e; border-radius: 14px; padding: 18px 20px;
     color: #f0f0f0; font-size: 18px; font-weight: 600;
     cursor: pointer; font-family: inherit;
     display: flex; align-items: center; gap: 12px;
-    transition: opacity .15s;
-    user-select: none;
+    transition: opacity .15s; user-select: none;
   }
   .action-label:active { opacity: 0.7; }
   .action-label input[type="file"] { display: none; }
@@ -61,22 +52,59 @@
     display: flex; align-items: center; justify-content: space-between;
     width: calc(100% - 40px);
   }
-  .badge {
-    background: #2e2e5e; border-radius: 8px; padding: 4px 10px;
-    font-size: 13px; color: #aaa;
-  }
+  .badge { background: #2e2e5e; border-radius: 8px; padding: 4px 10px; font-size: 13px; color: #aaa; }
 
-  /* ── ENTRY ── */
-  .preview-wrap { padding: 16px 20px 0; }
-  .preview-wrap img {
-    width: 100%; border-radius: 12px; object-fit: cover; max-height: 220px;
+  /* API KEY */
+  .api-setup {
+    margin: 16px 20px 0;
+    background: #0e1a0e; border: 1px solid #1e3e1e;
+    border-radius: 14px; padding: 16px 20px;
   }
+  .api-setup-title { font-size: 13px; color: #66bb66; margin-bottom: 8px; font-weight: 600; }
+  .api-key-row { display: flex; gap: 8px; }
+  .api-key-input {
+    flex: 1; background: #0d0d1a; border: 1px solid #1e3e1e;
+    border-radius: 8px; padding: 10px 12px;
+    color: #f0f0f0; font-size: 14px; font-family: inherit; outline: none;
+  }
+  .api-key-input:focus { border-color: #44bb44; }
+  .api-save-btn {
+    background: #1a3a1a; border: 1px solid #2e6e2e;
+    border-radius: 8px; padding: 10px 14px;
+    color: #66ee66; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .api-status { font-size: 12px; color: #777; margin-top: 6px; }
+  .api-status.ok { color: #44cc88; }
+
+  /* ENTRY */
+  .preview-wrap { padding: 16px 20px 0; }
+  .preview-wrap img { width: 100%; border-radius: 12px; object-fit: cover; max-height: 220px; }
   .no-image {
     width: 100%; height: 120px; border-radius: 12px;
     background: #1a1a2e; border: 2px dashed #2e2e5e;
     display: flex; align-items: center; justify-content: center;
     color: #555; font-size: 14px;
   }
+
+  .ai-analyze-btn {
+    margin-top: 10px; width: 100%;
+    background: linear-gradient(135deg, #0e2a1e, #0a1e14);
+    border: 1px solid #2e6e4e; border-radius: 10px; padding: 12px;
+    color: #44ee88; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: opacity .15s;
+  }
+  .ai-analyze-btn:active { opacity: 0.7; }
+  .ai-analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .ai-spinner {
+    width: 16px; height: 16px; border: 2px solid #44ee8844;
+    border-top-color: #44ee88; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  .ai-spinner.show { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   .section { padding: 16px 20px 0; }
   .field-label { font-size: 13px; color: #888; display: block; margin-bottom: 6px; }
@@ -85,10 +113,18 @@
     width: 100%;
     background: #1a1a2e; border: 1px solid #2e2e5e;
     border-radius: 10px; padding: 12px 14px;
-    color: #f0f0f0; font-size: 18px; font-family: inherit;
-    outline: none;
+    color: #f0f0f0; font-size: 18px; font-family: inherit; outline: none;
   }
   .name-input:focus { border-color: #7b7bff; }
+
+  .memo-input {
+    width: 100%;
+    background: #1a1a2e; border: 1px solid #2e2e5e;
+    border-radius: 10px; padding: 12px 14px;
+    color: #f0f0f0; font-size: 15px; font-family: inherit; outline: none;
+    resize: none; min-height: 80px; line-height: 1.5;
+  }
+  .memo-input:focus { border-color: #7b7bff; }
 
   .price-display {
     background: #1a1a2e; border-radius: 10px; padding: 14px 20px;
@@ -97,15 +133,12 @@
   .yen { font-size: 22px; color: #888; }
   .price-num { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: 1px; }
 
-  .numpad {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-  }
+  .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .num-key {
     background: #1a1a2e; border: 1px solid #2e2e5e;
     border-radius: 10px; padding: 16px 0;
     color: #f0f0f0; font-size: 22px; font-weight: 600;
-    cursor: pointer; font-family: inherit;
-    transition: background .1s;
+    cursor: pointer; font-family: inherit; transition: background .1s;
   }
   .num-key:active { background: #2e2e5e; }
   .key-clear { background: #2a1a1a; color: #ff7777; border-color: #3e2e2e; }
@@ -121,7 +154,7 @@
   }
   .save-btn:active { opacity: 0.8; }
 
-  /* ── HISTORY ── */
+  /* HISTORY */
   .total-bar {
     margin: 16px 20px;
     background: linear-gradient(135deg, #1a1a3e, #12122e);
@@ -135,30 +168,25 @@
   .list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 40px; }
   .card {
     background: #1a1a2e; border-radius: 12px; padding: 12px;
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: flex-start; gap: 12px;
     border: 1px solid #2e2e4e;
   }
   .thumb { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
   .thumb-placeholder {
     width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0;
-    background: #2e2e4e; display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
+    background: #2e2e4e; display: flex; align-items: center; justify-content: center; font-size: 24px;
   }
   .card-info { flex: 1; min-width: 0; }
   .card-name { font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .card-memo { font-size: 12px; color: #888; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .card-date { font-size: 12px; color: #666; margin-top: 2px; }
-  .card-price { font-size: 18px; font-weight: 700; color: #7b7bff; flex-shrink: 0; }
-  .delete-btn {
-    background: transparent; border: none;
-    color: #555; font-size: 18px; cursor: pointer;
-    padding: 4px 8px; flex-shrink: 0;
-  }
+  .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .card-price { font-size: 18px; font-weight: 700; color: #7b7bff; }
+  .delete-btn { background: transparent; border: none; color: #555; font-size: 18px; cursor: pointer; padding: 2px 6px; }
   .empty { text-align: center; color: #555; padding: 60px 20px; font-size: 16px; }
 
-  /* ── TOAST ── */
   .toast {
-    position: fixed; bottom: 30px; left: 50%;
-    transform: translateX(-50%);
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     background: #333; color: #fff;
     border-radius: 10px; padding: 10px 20px;
     font-size: 14px; font-weight: 600; white-space: nowrap;
@@ -167,7 +195,6 @@
   }
   .toast.show { opacity: 1; }
 
-  /* ── CAMERA VIEW ── */
   #camera-view {
     position: fixed; inset: 0; background: #000;
     display: none; flex-direction: column; z-index: 100;
@@ -182,25 +209,17 @@
   .shutter-btn {
     width: 70px; height: 70px; border-radius: 50%;
     border: 3px solid #fff; background: transparent;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
-  .shutter-inner {
-    width: 54px; height: 54px; border-radius: 50%; background: #fff;
-  }
-  .cam-cancel {
-    color: #fff; background: transparent; border: none;
-    font-size: 28px; cursor: pointer; padding: 8px;
-  }
+  .shutter-inner { width: 54px; height: 54px; border-radius: 50%; background: #fff; }
+  .cam-cancel { color: #fff; background: transparent; border: none; font-size: 28px; cursor: pointer; padding: 8px; }
 
-  /* ── PAGE VISIBILITY ── */
   .page { display: none; }
   .page.active { display: block; }
 </style>
 </head>
 <body>
 
-<!-- カメラビュー -->
 <div id="camera-view">
   <video id="video" autoplay playsinline muted></video>
   <div class="camera-bar">
@@ -234,6 +253,15 @@
     <span>記録一覧を見る</span>
     <span class="badge" id="home-badge">0件 / ¥0</span>
   </button>
+
+  <div class="api-setup">
+    <div class="api-setup-title">🔍 Google Vision AI — APIキー設定</div>
+    <div class="api-key-row">
+      <input id="api-key-input" class="api-key-input" type="password" placeholder="AIzaSy...">
+      <button class="api-save-btn" onclick="saveApiKey()">保存</button>
+    </div>
+    <div class="api-status" id="api-status">未設定（設定するとAIが商品名を自動入力します）</div>
+  </div>
 </div>
 
 <!-- 入力画面 -->
@@ -243,14 +271,26 @@
     <span class="header-title">アイテムを記録</span>
     <div style="width:60px"></div>
   </div>
+
   <div class="preview-wrap">
     <img id="preview-img" src="" alt="preview" style="display:none">
     <div id="no-image" class="no-image">画像なし</div>
+    <button id="ai-btn" class="ai-analyze-btn" onclick="analyzeWithAI()" style="display:none">
+      <div class="ai-spinner" id="ai-spinner"></div>
+      <span id="ai-btn-text">🔍 AIで商品名を自動入力</span>
+    </button>
   </div>
+
   <div class="section">
     <label class="field-label">アイテム名</label>
     <input id="item-name" class="name-input" type="text" placeholder="例：マグカップ">
   </div>
+
+  <div class="section">
+    <label class="field-label">メモ（任意）</label>
+    <textarea id="item-memo" class="memo-input" placeholder="色・サイズ・購入場所など自由に入力"></textarea>
+  </div>
+
   <div class="section">
     <label class="field-label">値段</label>
     <div class="price-display">
@@ -272,6 +312,7 @@
       <button class="num-key key-back" onclick="pressBack()">⌫</button>
     </div>
   </div>
+
   <button class="save-btn" onclick="saveEntry()">保存する</button>
 </div>
 
@@ -290,20 +331,36 @@
 </div>
 
 <div class="toast" id="toast"></div>
-
 <canvas id="canvas" style="display:none"></canvas>
 
 <script>
-// ── STATE ──────────────────────────────────────────
 let records = JSON.parse(localStorage.getItem('mono-kiroku') || '[]');
 let priceStr = '';
 let currentImage = null;
 let cameraStream = null;
+let apiKey = localStorage.getItem('mono-kiroku-visionkey') || '';
 
-// ── INIT ──────────────────────────────────────────
 updateHomeBadge();
+if (apiKey) {
+  document.getElementById('api-key-input').value = apiKey;
+  document.getElementById('api-status').textContent = '✅ APIキー設定済み — AI自動入力が使えます';
+  document.getElementById('api-status').classList.add('ok');
+}
 
-// ── NAVIGATION ────────────────────────────────────
+function saveApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val.startsWith('AIzaSy')) {
+    showToast('正しいAPIキーを入力してください（AIzaSy...）');
+    return;
+  }
+  apiKey = val;
+  localStorage.setItem('mono-kiroku-visionkey', apiKey);
+  const st = document.getElementById('api-status');
+  st.textContent = '✅ APIキー設定済み — AI自動入力が使えます';
+  st.classList.add('ok');
+  showToast('APIキーを保存しました');
+}
+
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
@@ -311,157 +368,198 @@ function showPage(name) {
   if (name === 'home') updateHomeBadge();
 }
 
-// ── CAMERA ────────────────────────────────────────
 async function startCamera() {
   try {
-    const s = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' } }
-    });
+    const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } });
     cameraStream = s;
-    const video = document.getElementById('video');
-    video.srcObject = s;
+    document.getElementById('video').srcObject = s;
     document.getElementById('camera-view').classList.add('active');
-  } catch(e) {
-    showToast('カメラの許可が必要です');
-  }
+  } catch(e) { showToast('カメラの許可が必要です'); }
 }
 
 function stopCamera() {
-  if (cameraStream) {
-    cameraStream.getTracks().forEach(t => t.stop());
-    cameraStream = null;
-  }
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
   document.getElementById('camera-view').classList.remove('active');
 }
 
 function capturePhoto() {
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0);
   currentImage = canvas.toDataURL('image/jpeg', 0.8);
-  stopCamera();
-  openEntry();
+  stopCamera(); openEntry();
 }
 
-// ── FILE UPLOAD ────────────────────────────────────
 function handleFile(input) {
-  const file = input.files[0];
-  if (!file) return;
+  const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    currentImage = e.target.result;
-    input.value = '';
-    openEntry();
-  };
+  reader.onload = e => { currentImage = e.target.result; input.value = ''; openEntry(); };
   reader.readAsDataURL(file);
 }
 
-// ── ENTRY ──────────────────────────────────────────
 function openEntry() {
   priceStr = '';
   document.getElementById('item-name').value = '';
+  document.getElementById('item-memo').value = '';
   updatePriceDisplay();
   const img = document.getElementById('preview-img');
   const noImg = document.getElementById('no-image');
+  const aiBtn = document.getElementById('ai-btn');
   if (currentImage) {
-    img.src = currentImage;
-    img.style.display = 'block';
-    noImg.style.display = 'none';
+    img.src = currentImage; img.style.display = 'block'; noImg.style.display = 'none';
+    aiBtn.style.display = apiKey ? 'flex' : 'none';
   } else {
-    img.style.display = 'none';
-    noImg.style.display = 'flex';
+    img.style.display = 'none'; noImg.style.display = 'flex'; aiBtn.style.display = 'none';
   }
   showPage('entry');
 }
 
-function pressNum(n) {
-  if (priceStr.length >= 8) return;
-  priceStr += n;
-  updatePriceDisplay();
+// ── Google Cloud Vision API ──────────────────────
+async function analyzeWithAI() {
+  if (!apiKey) { showToast('APIキーを設定してください'); return; }
+  if (!currentImage) return;
+
+  const btn = document.getElementById('ai-btn');
+  const spinner = document.getElementById('ai-spinner');
+  const btnText = document.getElementById('ai-btn-text');
+  btn.disabled = true; spinner.classList.add('show'); btnText.textContent = 'AI解析中...';
+
+  try {
+    const base64 = currentImage.split(',')[1];
+
+    const res = await fetch(
+      `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requests: [{
+            image: { content: base64 },
+            features: [
+              { type: 'LABEL_DETECTION', maxResults: 5 },
+              { type: 'OBJECT_LOCALIZATION', maxResults: 3 },
+              { type: 'TEXT_DETECTION', maxResults: 1 }
+            ]
+          }]
+        })
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || 'APIエラー');
+    }
+
+    const data = await res.json();
+    const result = data.responses[0];
+
+    // 優先順位: オブジェクト検出 > ラベル > テキスト
+    let name = '';
+
+    // 1. オブジェクト検出（最も具体的）
+    if (result.localizedObjectAnnotations?.length > 0) {
+      name = result.localizedObjectAnnotations[0].name;
+    }
+    // 2. ラベル検出（フォールバック）
+    else if (result.labelAnnotations?.length > 0) {
+      name = result.labelAnnotations[0].description;
+    }
+    // 3. テキスト（商品名が写っている場合）
+    else if (result.textAnnotations?.length > 0) {
+      const text = result.textAnnotations[0].description.split('\n')[0];
+      if (text.length <= 20) name = text;
+    }
+
+    if (name) {
+      // 英語で返ってきた場合は日本語に翻訳を試みる
+      // （Vision APIは英語で返すことが多いため簡易マッピング）
+      const translations = {
+        'Cup': 'カップ', 'Mug': 'マグカップ', 'Bottle': 'ボトル',
+        'Bag': 'バッグ', 'Shoe': 'シューズ', 'Shoes': 'シューズ',
+        'Book': '本', 'Clothing': '衣類', 'Shirt': 'シャツ',
+        'Pants': 'パンツ', 'Jacket': 'ジャケット', 'Coat': 'コート',
+        'Watch': '時計', 'Glasses': 'メガネ', 'Toy': 'おもちゃ',
+        'Food': '食品', 'Drink': '飲み物', 'Flower': '花',
+        'Plant': '植物', 'Furniture': '家具', 'Chair': '椅子',
+        'Table': 'テーブル', 'Lamp': 'ランプ', 'Bowl': 'ボウル',
+        'Plate': 'お皿', 'Pen': 'ペン', 'Notebook': 'ノート',
+        'Headphones': 'ヘッドフォン', 'Keyboard': 'キーボード',
+        'Mouse': 'マウス', 'Laptop': 'ノートPC', 'Phone': 'スマートフォン',
+        'Camera': 'カメラ', 'Backpack': 'リュック', 'Wallet': '財布',
+        'Umbrella': '傘', 'Hat': '帽子', 'Scarf': 'スカーフ',
+        'Socks': '靴下', 'Glove': '手袋', 'Sneakers': 'スニーカー',
+        'Sandal': 'サンダル', 'Handbag': 'ハンドバッグ',
+      };
+      const translated = translations[name] || name;
+      document.getElementById('item-name').value = translated;
+      showToast('🔍 商品名を自動入力しました');
+    } else {
+      showToast('商品名を検出できませんでした');
+    }
+  } catch(e) {
+    showToast('エラー: ' + e.message);
+  } finally {
+    btn.disabled = false; spinner.classList.remove('show');
+    btnText.textContent = '🔍 AIで商品名を自動入力';
+  }
 }
-function pressBack() {
-  priceStr = priceStr.slice(0, -1);
-  updatePriceDisplay();
-}
-function pressClear() {
-  priceStr = '';
-  updatePriceDisplay();
-}
+
+function pressNum(n) { if (priceStr.length >= 8) return; priceStr += n; updatePriceDisplay(); }
+function pressBack() { priceStr = priceStr.slice(0, -1); updatePriceDisplay(); }
+function pressClear() { priceStr = ''; updatePriceDisplay(); }
 function updatePriceDisplay() {
-  const n = parseInt(priceStr || '0', 10);
-  document.getElementById('price-display').textContent = n.toLocaleString('ja-JP');
+  document.getElementById('price-display').textContent = parseInt(priceStr||'0',10).toLocaleString('ja-JP');
 }
 
 function saveEntry() {
   const name = document.getElementById('item-name').value.trim();
   if (!name) { showToast('名前を入力してください'); return; }
+  const memo = document.getElementById('item-memo').value.trim();
   const price = parseInt(priceStr || '0', 10);
-  const record = {
-    id: Date.now(),
-    name,
-    price,
-    image: currentImage,
-    date: new Date().toLocaleDateString('ja-JP')
-  };
-  records.unshift(record);
-  persist();
-  showToast('保存しました！');
-  showPage('history');
+  records.unshift({ id: Date.now(), name, memo, price, image: currentImage, date: new Date().toLocaleDateString('ja-JP') });
+  persist(); showToast('保存しました！'); showPage('history');
 }
 
-// ── HISTORY ───────────────────────────────────────
 function renderHistory() {
   const list = document.getElementById('record-list');
   const total = records.reduce((s, r) => s + r.price, 0);
   document.getElementById('total-amount').textContent = '¥' + total.toLocaleString('ja-JP');
-
-  if (records.length === 0) {
-    list.innerHTML = '<div class="empty">まだ記録がありません</div>';
-    return;
-  }
+  if (records.length === 0) { list.innerHTML = '<div class="empty">まだ記録がありません</div>'; return; }
   list.innerHTML = records.map(r => `
     <div class="card">
-      ${r.image
-        ? `<img class="thumb" src="${r.image}" alt="${r.name}">`
-        : `<div class="thumb-placeholder">📦</div>`}
+      ${r.image ? `<img class="thumb" src="${r.image}" alt="${escHtml(r.name)}">` : `<div class="thumb-placeholder">📦</div>`}
       <div class="card-info">
         <div class="card-name">${escHtml(r.name)}</div>
+        ${r.memo ? `<div class="card-memo">📝 ${escHtml(r.memo)}</div>` : ''}
         <div class="card-date">${r.date}</div>
       </div>
-      <div class="card-price">¥${r.price.toLocaleString('ja-JP')}</div>
-      <button class="delete-btn" onclick="deleteRecord(${r.id})">✕</button>
+      <div class="card-right">
+        <div class="card-price">¥${r.price.toLocaleString('ja-JP')}</div>
+        <button class="delete-btn" onclick="deleteRecord(${r.id})">✕</button>
+      </div>
     </div>
   `).join('');
 }
 
 function deleteRecord(id) {
   records = records.filter(r => r.id !== id);
-  persist();
-  renderHistory();
-  showToast('削除しました');
+  persist(); renderHistory(); showToast('削除しました');
 }
 
-// ── UTILS ──────────────────────────────────────────
 function persist() {
   localStorage.setItem('mono-kiroku', JSON.stringify(records));
   updateHomeBadge();
 }
-
 function updateHomeBadge() {
   const total = records.reduce((s, r) => s + r.price, 0);
-  document.getElementById('home-badge').textContent =
-    records.length + '件 / ¥' + total.toLocaleString('ja-JP');
+  document.getElementById('home-badge').textContent = records.length + '件 / ¥' + total.toLocaleString('ja-JP');
 }
-
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
